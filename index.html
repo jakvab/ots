@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=1" />
+<link rel="stylesheet" href="css/style.css?v=2" />
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
@@ -77,10 +77,10 @@
     <section class="zk">
       <h3>Hur den är säker</h3>
       <ul>
-        <li><b>▟▙</b> Krypteras i webbläsaren med AES-256-GCM innan något skickas.</li>
-        <li><b>▟▙</b> Nyckeln ligger i länkens <code>#</code>-fragment — webbläsare skickar det aldrig till servern.</li>
-        <li><b>▟▙</b> Servern lagrar bara krypterad data (krypterad även i vila) och raderar efter läsning.</li>
-        <li><b>▟▙</b> <a href="https://github.com/jakvab/ots" target="_blank" rel="noopener">Öppen källkod</a>. Ingen inloggning, ingen spårning.</li>
+        <li><b>▟▙</b> <span><strong>Krypteras i din webbläsare</strong> med AES-256-GCM — innan något lämnar enheten.</span></li>
+        <li><b>▟▙</b> <span><strong>Nyckeln stannar hos dig.</strong> Den ligger i länkens <code>#</code>-del, som webbläsaren aldrig skickar till servern.</span></li>
+        <li><b>▟▙</b> <span><strong>Servern ser bara krypterad data</strong> — även krypterad i vila — och raderar den efter läsning.</span></li>
+        <li><b>▟▙</b> <span><strong><a href="https://github.com/jakvab/ots" target="_blank" rel="noopener">Öppen källkod</a>.</strong> Ingen inloggning, ingen spårning.</span></li>
       </ul>
     </section>
   </main>
