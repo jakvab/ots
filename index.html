@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ots — dela en hemlighet, en gång | jakvab</title>
+<meta name="description" content="Dela lösenord och hemligheter via en engångslänk. Krypteras i din webbläsare (zero-knowledge) — servern kan aldrig läsa innehållet. Av jakvab." />
+<meta name="theme-color" content="#0e0f14" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=1" />
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><polygon points="20,14 52,14 44,50 12,50" fill="#ff5a1f"/></svg>
+    <span class="brand">ots<b>.</b></span>
+    <span class="spacer"></span>
+    <a href="https://jakvab.se" target="_blank" rel="noopener">av jakvab ↗</a>
+  </header>
+
+  <main>
+    <p class="kicker">// ONE-TIME SECRET · ZERO-KNOWLEDGE</p>
+    <h1 class="title">Dela en hemlighet —<br /><span class="hl">en gång.</span></h1>
+    <p class="lead">Klistra in ett lösenord, en nyckel eller en token. Det krypteras i <b>din</b>
+    webbläsare, delas som en engångslänk, och raderas när den lästs. Servern ser bara krypterad data.</p>
+
+    <div class="card">
+      <form id="create-form" novalidate>
+        <label for="secret">Hemlighet</label>
+        <textarea id="secret" name="secret" maxlength="60000" placeholder="Lösenord, API-nyckel, token …" required></textarea>
+
+        <div class="row">
+          <div>
+            <label for="ttl">Utgår efter</label>
+            <select id="ttl" name="ttl">
+              <option value="3600">1 timme</option>
+              <option value="86400" selected>1 dygn</option>
+              <option value="604800">7 dygn</option>
+            </select>
+          </div>
+          <div>
+            <label for="views">Max antal läsningar</label>
+            <select id="views" name="views">
+              <option value="1" selected>1 (bränns direkt)</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAADpI9_Gu3wHQQ_AO" data-theme="dark"></div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn">Skapa länk →</button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </form>
+
+      <div id="result" hidden>
+        <label>Engångslänk — kopiera och dela</label>
+        <input id="link-out" class="out" readonly />
+        <div class="btn-row">
+          <button id="copy-link" class="btn" type="button">Kopiera länk</button>
+          <button id="again" class="btn ghost" type="button">Skapa ny</button>
+        </div>
+        <p class="status">Nyckeln finns bara i länken (efter <code>#</code>) och nådde aldrig servern. Tappar du länken är hemligheten borta för gott.</p>
+      </div>
+    </div>
+
+    <section class="zk">
+      <h3>Hur den är säker</h3>
+      <ul>
+        <li><b>▟▙</b> Krypteras i webbläsaren med AES-256-GCM innan något skickas.</li>
+        <li><b>▟▙</b> Nyckeln ligger i länkens <code>#</code>-fragment — webbläsare skickar det aldrig till servern.</li>
+        <li><b>▟▙</b> Servern lagrar bara krypterad data (krypterad även i vila) och raderar efter läsning.</li>
+        <li><b>▟▙</b> Öppen källkod. Ingen inloggning, ingen spårning.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year">2026</span> jakvab AB</span>
+    <span class="spacer"></span>
+    <a href="https://jakvab.se/cases.html" target="_blank" rel="noopener">fler verktyg av jakvab ↗</a>
+  </footer>
+</div>
+
+<script src="js/crypto.js?v=1"></script>
+<script src="js/app.js?v=1"></script>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hemlighet | ots.jakvab.se</title>
+<meta name="theme-color" content="#0e0f14" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=1" />
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><polygon points="20,14 52,14 44,50 12,50" fill="#ff5a1f"/></svg>
+    <span class="brand">ots<b>.</b></span>
+    <span class="spacer"></span>
+    <a href="/">skapa egen ↗</a>
+  </header>
+
+  <main id="reveal">
+    <p class="kicker">// EN HEMLIGHET DELAD MED DIG</p>
+    <h1 class="title">Visa <span class="hl">hemligheten.</span></h1>
+
+    <div class="card">
+      <p id="reveal-state" class="status">Läser …</p>
+
+      <div id="reveal-btn-wrap" hidden>
+        <p class="lead" style="margin-top:0">Hemligheten dekrypteras lokalt i din webbläsare. Den raderas från servern i samma stund du visar den.</p>
+        <div class="btn-row">
+          <button id="reveal-btn" class="btn" type="button">Visa hemlighet</button>
+        </div>
+      </div>
+
+      <div id="secret-wrap" hidden>
+        <label>Hemlighet</label>
+        <textarea id="secret-out" class="out secret" readonly></textarea>
+        <div class="btn-row">
+          <button id="copy-secret" class="btn" type="button">Kopiera</button>
+          <a class="btn ghost" href="/">Dela en egen →</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="zk">
+      <h3>Varför du bara ser den en gång</h3>
+      <ul>
+        <li><b>▟▙</b> Länken innehåller dekrypteringsnyckeln (efter <code>#</code>) — bara du som har länken kan läsa.</li>
+        <li><b>▟▙</b> När du klickar "Visa" raderas den krypterade datan från servern.</li>
+        <li><b>▟▙</b> Spara innehållet nu om du behöver det — länken slutar fungera direkt.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year">2026</span> jakvab AB</span>
+    <span class="spacer"></span>
+    <a href="https://jakvab.se" target="_blank" rel="noopener">jakvab.se ↗</a>
+  </footer>
+</div>
+
+<script src="js/crypto.js?v=1"></script>
+<script src="js/app.js?v=1"></script>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
