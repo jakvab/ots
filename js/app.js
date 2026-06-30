@@ -6,6 +6,10 @@
   var API = "/api"; // same-origin via CloudFront → API Gateway
 
   function $(id) { return document.getElementById(id); }
+
+  var yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
   function copy(text, btn) {
     navigator.clipboard.writeText(text).then(function () {
       if (!btn) return;
@@ -104,9 +108,7 @@
         })
         .then(function (meta) {
           if (!meta) return;
-          stateEl.textContent = "Den här hemligheten kan bara läsas " +
-            (meta.viewsLeft === 1 ? "en gång" : (meta.viewsLeft + " gånger")) +
-            " och raderas sedan.";
+          stateEl.textContent = "Hemligheten väntar på att läsas — och raderas sedan.";
           btnWrap.hidden = false;
         })
         .catch(function () { gone("Kunde inte nå servern."); });
