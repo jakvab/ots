@@ -49,6 +49,11 @@ h1.title .hl { color: var(--orange); }
 
 /* form */
 label { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: .5px; color: var(--muted); text-transform: uppercase; margin-bottom: .4rem; }
+label .opt { text-transform: none; letter-spacing: 0; color: rgba(154,160,176,.7); font-weight: 400; }
+label.gap { margin-top: 1.3rem; }
+#pass-wrap { margin-top: 1.2rem; }
+.hint { color: var(--muted); font-size: .82rem; line-height: 1.5; margin: .5rem 0 0; }
+.hint b { color: var(--ink); font-weight: 600; }
 textarea, input, select {
   width: 100%; background: var(--bg); color: var(--ink);
   border: 1px solid var(--line); padding: .7rem .8rem; font-family: var(--mono); font-size: .95rem;

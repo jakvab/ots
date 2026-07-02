@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=2" />
+<link rel="stylesheet" href="css/style.css?v=3" />
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
@@ -55,6 +55,13 @@
           </div>
         </div>
 
+        <label for="pass" class="gap">Lösenfras <span class="opt">valfritt — extra lås</span></label>
+        <input id="pass" name="pass" type="text" autocomplete="off" spellcheck="false"
+               placeholder="t.ex. tre-slumpade-ord" />
+        <p class="hint">Läggs som ett extra lås ovanpå krypteringen. <b>Dela den i en annan kanal
+        än länken</b> (säg den, ring, separat chatt) — då räcker det inte att någon kommer över URL:en.
+        Vi kan inte återställa den; tappar ni frasen är hemligheten borta.</p>
+
         <div class="cf-turnstile" data-sitekey="0x4AAAAAADpI9_Gu3wHQQ_AO" data-theme="dark"></div>
 
         <div class="btn-row">
@@ -93,7 +100,7 @@
   </footer>
 </div>
 
-<script src="js/crypto.js?v=1"></script>
-<script src="js/app.js?v=2"></script>
+<script src="js/crypto.js?v=2"></script>
+<script src="js/app.js?v=3"></script>
 </body>
 </html>

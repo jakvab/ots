@@ -38,7 +38,9 @@
       status.textContent = "Krypterar i webbläsaren …"; status.className = "status";
 
       try {
-        var enc = await OTS.encrypt(secret);
+        var passEl = $("pass");
+        var passphrase = passEl ? passEl.value.trim() : "";
+        var enc = await OTS.encrypt(secret, passphrase);
         status.textContent = "Sparar krypterad blob …";
         var r = await fetch(API + "/secrets", {
           method: "POST",
@@ -47,6 +49,7 @@
             ct: enc.ct,
             ttlSeconds: parseInt($("ttl").value, 10),
             maxViews: parseInt($("views").value, 10),
+            pw: enc.pw,
             turnstileToken: token
           })
         });
@@ -90,6 +93,9 @@
     var secretWrap = $("secret-wrap");
     var secretOut = $("secret-out");
     var copySecret = $("copy-secret");
+    var passWrap = $("pass-wrap");
+    var passInput = $("pass");
+    var needsPass = false;
 
     function gone(msg) {
       btnWrap.hidden = true;
@@ -108,28 +114,57 @@
         })
         .then(function (meta) {
           if (!meta) return;
+          needsPass = !!meta.pw;
+          if (needsPass && passWrap) passWrap.hidden = false;
           stateEl.textContent = "Hemligheten väntar på att läsas — och raderas sedan.";
           btnWrap.hidden = false;
         })
         .catch(function () { gone("Kunde inte nå servern."); });
 
+      var fetchedCt = null;   // blob is fetched (and burned) once; passphrase retried locally
+      var viewsLeftMsg = "";
+
+      function showSecret(pt) {
+        secretOut.value = pt;
+        secretWrap.hidden = false;
+        btnWrap.hidden = true;
+        stateEl.textContent = viewsLeftMsg;
+        stateEl.className = "status ok";
+      }
+
       revealBtn.addEventListener("click", async function () {
+        if (needsPass && passInput && !passInput.value.trim()) {
+          stateEl.textContent = "Ange lösenfrasen du fått i en annan kanal.";
+          stateEl.className = "status err";
+          return;
+        }
+        var passphrase = needsPass && passInput ? passInput.value.trim() : "";
         revealBtn.disabled = true;
-        revealBtn.textContent = "Hämtar …";
+        revealBtn.textContent = fetchedCt ? "Dekrypterar …" : "Hämtar …";
         try {
-          var r = await fetch(API + "/secrets/" + encodeURIComponent(id) + "/reveal", { method: "POST" });
-          if (!r.ok) { gone(); return; }
-          var data = await r.json();
-          var pt = await OTS.decrypt(data.ct, key);
-          secretOut.value = pt;
-          secretWrap.hidden = false;
-          btnWrap.hidden = true;
-          stateEl.textContent = data.viewsLeft > 0
-            ? ("Läst. Den kan läsas " + data.viewsLeft + " gång(er) till.")
-            : "Läst och raderad. Den här länken fungerar inte längre.";
-          stateEl.className = "status ok";
+          // Fetch+burn only once. On a wrong-passphrase retry we reuse the blob.
+          if (fetchedCt === null) {
+            var r = await fetch(API + "/secrets/" + encodeURIComponent(id) + "/reveal", { method: "POST" });
+            if (!r.ok) { gone(); return; }
+            var data = await r.json();
+            fetchedCt = data.ct;
+            viewsLeftMsg = data.viewsLeft > 0
+              ? ("Läst. Den kan läsas " + data.viewsLeft + " gång(er) till.")
+              : "Läst och raderad. Den här länken fungerar inte längre.";
+          }
+          var pt = await OTS.decrypt(fetchedCt, key, passphrase);
+          showSecret(pt);
         } catch (err) {
-          gone("Kunde inte dekryptera — fel nyckel eller skadad data.");
+          if (needsPass) {
+            // Blob is already burned; let them retry the passphrase locally.
+            stateEl.textContent = "Fel lösenfras — försök igen. (Hemligheten är redan hämtad; testa frasen på nytt.)";
+            stateEl.className = "status err";
+            revealBtn.disabled = false;
+            revealBtn.textContent = "Visa hemlighet";
+            if (passInput) { passInput.focus(); passInput.select(); }
+          } else {
+            gone("Kunde inte dekryptera — fel nyckel eller skadad data.");
+          }
         }
       });
 

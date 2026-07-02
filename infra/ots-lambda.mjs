@@ -115,10 +115,12 @@ export const handler = async (event) => {
     if (!Number.isInteger(maxViews) || maxViews < 1) maxViews = 1;
     if (maxViews > MAX_VIEWS) maxViews = MAX_VIEWS;
 
+    const pw = !!data.pw; // passphrase layer applied client-side (server never sees it)
+
     const id = randomBytes(16).toString("base64url");
     await ddb.send(new PutCommand({
       TableName: TABLE,
-      Item: { id, ct, createdAt: now(), ttl: now() + ttlSeconds, views: maxViews },
+      Item: { id, ct, createdAt: now(), ttl: now() + ttlSeconds, views: maxViews, pw },
     }));
     return reply(201, { id });
   }
@@ -143,7 +145,7 @@ export const handler = async (event) => {
       if (viewsLeft <= 0) {
         await ddb.send(new DeleteCommand({ TableName: TABLE, Key: { id } }));
       }
-      return reply(200, { ct: old.ct, viewsLeft });
+      return reply(200, { ct: old.ct, viewsLeft, pw: !!old.pw });
     } catch (err) {
       if (err.name === "ConditionalCheckFailedException") return reply(404, { error: "gone" });
       console.error("reveal error", err);
@@ -159,7 +161,7 @@ export const handler = async (event) => {
     const res = await ddb.send(new GetCommand({ TableName: TABLE, Key: { id } }));
     const item = res.Item;
     if (!item || item.ttl <= now() || item.views <= 0) return reply(404, { error: "gone" });
-    return reply(200, { ok: true });
+    return reply(200, { ok: true, pw: !!item.pw });
   }
 
   return reply(404, { error: "not found" });
